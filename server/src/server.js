@@ -2,14 +2,20 @@ import express from 'express';
 import path from 'path';
 import React from 'react';
 import { renderToString } from 'react-dom/server';
-import Home from './client/src/components/Home';
+import { StaticRouter } from 'react-router-dom';
+import { renderRoutes } from 'react-router-config';
+import Routes from './client/src/Routes';
 
 const app = express();
 app.use(express.static('public'));
 
 app.use('/', (req, res) => {
-  const content = renderToString(<Home />);
-
+  const content = renderToString(
+    <StaticRouter location={req.path} context={{}}>
+      <div>{renderRoutes(Routes)}</div>
+    </StaticRouter>
+  );
+  
   const html = `
     <html>
       <head>
